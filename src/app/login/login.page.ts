@@ -19,17 +19,18 @@ export class LoginPage implements OnInit {
   }
 
   onLoginButtonPressed() {
-    if(this.sessionManager.performLogin(this.user, this.password)) {
-      this.router.navigate(['/home'], {queryParams: { email: this.email }});
+    if (this.sessionManager.performLogin(this.user, this.password)) {
+      this.router.navigate(['/home'], { queryParams: { email: this.email } });
     } else {
-      this.user=''
-      this.password=''
-      alert('Las credenciales ingresadas son inválidas.')
+      this.user = '';
+      this.password = '';
+      alert('Las credenciales ingresadas son inválidas.');
     }
   }
 
   onRegisterButtonPressed() {
-    this.router.navigate(['/register'])
+    this.router.navigate(['/register']);
   }
 
 }
+

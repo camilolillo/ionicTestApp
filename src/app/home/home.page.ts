@@ -8,14 +8,15 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomePage {
 
-  email: string = '';
+  email: string = '';  
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe( params=> {
-      this.email = params['email'] || '';
+    this.route.queryParams.subscribe(params => {
+      this.email = params['email'] || ''; 
     });
   }
 
 }
+
