@@ -13,13 +13,14 @@ export class LoginPage implements OnInit {
 
     user: string = '';
     password: string = '';
+    email: string = '';
 
   ngOnInit() {
   }
 
   onLoginButtonPressed() {
     if(this.sessionManager.performLogin(this.user, this.password)) {
-      this.router.navigate(['/home'])
+      this.router.navigate(['/home'], { queryParams: { email: this.email } })
     } else {
       this.user=''
       this.password=''
