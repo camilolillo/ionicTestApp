@@ -15,7 +15,11 @@ export class HomePage {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.email = params['email'] || ''; 
-    });
+    })
+  }
+
+  onSignOutButtonPressed() {
+    alert('Click en el botón de retroceso');
   }
 
 }
