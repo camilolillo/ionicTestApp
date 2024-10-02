@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
   async onLoginButtonPressed() {
     if (this.sessionManager.performLogin(this.user, this.password)) {
       await this.storageService.set('isSessionActive', true);
-      this.router.navigate(['/home'], { queryParams: { email: this.email } });
+      this.router.navigate(['/home']);
     } else {
       this.user = '';
       this.password = '';

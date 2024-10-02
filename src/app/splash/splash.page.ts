@@ -11,7 +11,9 @@ export class SplashPage implements OnInit {
 
   constructor(private router: Router, private storageService: StorageService) { }
 
-  async ngOnInit() {
+  async ngOnInit() { }
+
+  async ionViewDidEnter() {
     this.checkSession()
   }
 
