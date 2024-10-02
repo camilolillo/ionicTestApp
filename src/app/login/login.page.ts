@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionManager } from 'src/managers/SessionManager';
-import { StorageService } from 'src/managers/StorageService';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +9,7 @@ import { StorageService } from 'src/managers/StorageService';
 })
 export class LoginPage implements OnInit {
 
-  constructor(private router: Router, private sessionManager: SessionManager, private storageService: StorageService) { }
+  constructor(private router: Router, private sessionManager: SessionManager) { }
 
     email: string = '';
     user: string = '';
@@ -19,10 +18,9 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  async onLoginButtonPressed() {
+  onLoginButtonPressed() {
     if (this.sessionManager.performLogin(this.user, this.password)) {
-      await this.storageService.set('isSessionActive', true);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/home'], { queryParams: { email: this.email } });
     } else {
       this.user = '';
       this.password = '';
@@ -35,4 +33,3 @@ export class LoginPage implements OnInit {
   }
 
 }
-

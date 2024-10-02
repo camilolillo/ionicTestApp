@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router' 
-import { StorageService } from 'src/managers/StorageService';
 
 @Component({
   selector: 'app-splash',
@@ -9,22 +8,12 @@ import { StorageService } from 'src/managers/StorageService';
 })
 export class SplashPage implements OnInit {
 
-  constructor(private router: Router, private storageService: StorageService) { }
+  constructor(private router: Router) { }
 
-  async ngOnInit() { }
-
-  async ionViewDidEnter() {
-    this.checkSession()
+  ngOnInit() {
+    setTimeout(() => {
+      this.router.navigate(['/login']);  
+    }, 2000)
   }
-
-  async checkSession() {
-    const sessionStatus = await this.storageService.get('isSessionActive')
-    if(sessionStatus){
-      this.router.navigate(['/home'])
-    }else{
-      this.router.navigate(['/login'])
-    }
-  }
-
 }
 
