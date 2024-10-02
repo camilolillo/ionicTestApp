@@ -10,19 +10,23 @@ import { StorageService } from 'src/managers/StorageService';
 })
 export class LoginPage implements OnInit {
 
-  constructor(private router: Router, private sessionManager: SessionManager, private storageService: StorageService) { }
+  constructor(
+    private router: Router, 
+    private sessionManager: SessionManager,
+    private storageService: StorageService
+  ) { }
 
     email: string = '';
     user: string = '';
     password: string = '';
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   async onLoginButtonPressed() {
     if (this.sessionManager.performLogin(this.user, this.password)) {
-      await this.storageService.set('isSessionActive', true);
-      this.router.navigate(['/home']);
+      await this.storageService.set('userEmail', this.email)
+      await this.storageService.set('isSessionActive', true)
+      this.router.navigate(['/home'], { queryParams: { email: this.email } });
     } else {
       this.user = '';
       this.password = '';
@@ -35,4 +39,3 @@ export class LoginPage implements OnInit {
   }
 
 }
-

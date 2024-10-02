@@ -14,7 +14,14 @@ export class HomePage {
 
   constructor(private router: Router, private storageService: StorageService) {}
 
-  ngOnInit() { }
+  async ngOnInit() { 
+    this.loadData()
+  }
+
+  async loadData() {
+    const userEmail = await this.storageService.get('userEmail')
+    this.email = userEmail
+  }
 
   async onSignOutButtonPressed() {
     await this.storageService.clear()
@@ -22,4 +29,3 @@ export class HomePage {
   }
 
 }
-
