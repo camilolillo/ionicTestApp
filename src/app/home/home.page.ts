@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { StorageService } from 'src/managers/StorageService';
 import { Router } from '@angular/router';
+import { CancelAlertService } from 'src/managers/CancelAlertService';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,10 @@ export class HomePage {
 
   email: string = '';  
 
-  constructor(private router: Router, private storageService: StorageService) {}
+  constructor(
+    private router: Router, 
+    private storageService: StorageService,
+    private cancelAlertService: CancelAlertService) {}
 
   async ngOnInit() { 
     this.loadData()
@@ -24,8 +28,19 @@ export class HomePage {
   }
 
   async onSignOutButtonPressed() {
-    await this.storageService.clear()
-    this.router.navigate(['/splash'])
+    //await this.storageService.clear()
+    //this.router.navigate(['/splash'])
+    this.cancelAlertService.showAlert(
+      'Cerrar sesión',                         
+      '¿Estás seguro de que quieres cerrar sesión?',  
+      async () => {
+        await this.storageService.clear();     
+        this.router.navigate(['/splash']);     
+      },
+      () => {
+        console.log('Sesión no cerrada');
+      }
+    );
   }
 
 }
