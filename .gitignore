@@ -73,3 +73,6 @@ Thumbs.db
 .firebase
 *-debug.log
 .runtimeconfig.json
+
+# Ignorar archivos de configuración de entorno
+src/environments/environment.ts
