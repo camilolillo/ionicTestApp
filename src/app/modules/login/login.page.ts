@@ -32,7 +32,6 @@ export class LoginPage implements OnInit {
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      alert('Error')
     }
   }
 

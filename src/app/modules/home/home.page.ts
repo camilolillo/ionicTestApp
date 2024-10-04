@@ -28,8 +28,6 @@ export class HomePage {
   }
 
   async onSignOutButtonPressed() {
-    //await this.storageService.clear()
-    //this.router.navigate(['/splash'])
     this.cancelAlertService.showAlert(
       'Cerrar sesión',                         
       '¿Estás seguro de que quieres cerrar sesión?',  
@@ -40,7 +38,7 @@ export class HomePage {
       () => {
         console.log('Sesión no cerrada');
       }
-    );
+    )
   }
 
 }

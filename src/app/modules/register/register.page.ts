@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionManager } from 'src/managers/SessionManager';
 import { Router } from '@angular/router';
+import { CancelAlertService } from 'src/managers/CancelAlertService';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,8 @@ export class RegisterPage {
 
   constructor(
     private sessionManager: SessionManager, 
-    private router: Router
+    private router: Router,
+    private alert: CancelAlertService
   ) { }
 
   async onRegisterButtonPressed() {
@@ -28,34 +30,66 @@ export class RegisterPage {
       const user = userCredential.user;
 
       if (user) {
-        alert(`¡Registro exitoso! Bienvenido, ${user.email}`);
+        this.alert.showAlert(
+          'Registro exitoso',                         
+          'Ya eres parte de nuestro sistema', 
+          () => {    
+            this.router.navigate(['/splash']);     
+          }
+        )
       } else {
         alert('¡Registro exitoso!');
       }
 
-      this.router.navigate(['/home']);
+      
+      this.router.navigate(['/splash']);
+
     } catch (error: any) {
-      console.error('Error al registrar usuario:', error);
 
       switch (error.code) {
         case 'auth/email-already-in-use':
-          alert(
-            'Este correo electrónico ya está en uso. Por favor, utiliza otro o inicia sesión.'
-          );
-          break;
+          this.alert.showAlert(
+            'Error',                         
+            'Este correo electrónico ya está en uso. Por favor, utiliza otro o inicia sesión.', 
+            () => {    
+              this.clean     
+            }
+          )
+          break
         case 'auth/invalid-email':
-          alert('La dirección de correo electrónico no es válida.');
-          break;
+          this.alert.showAlert(
+            'Error',                         
+            'La dirección de correo electrónico no es válida.', 
+            () => {    
+              this.clean     
+            }
+          )
+          break
         case 'auth/weak-password':
-          alert(
-            'La contraseña es demasiado débil. Debe tener al menos 6 caracteres.'
-          );
-          break;
+          this.alert.showAlert(
+            'Error',                         
+            'La contraseña es muy débil.', 
+            () => {    
+              this.clean     
+            }
+          )
+          break
         default:
-          alert('Ocurrió un error al registrar el usuario: ' + error.message);
-          break;
+          this.alert.showAlert(
+            'Error',                         
+            'Ocurrió un error al registrar el usuario: ' + error.message, 
+            () => {    
+              this.clean     
+            }
+          )
+          break
       }
     }
+  }
+
+  clean() {
+    this.email = ''
+    this.password = ''
   }
   
 }
