@@ -29,11 +29,11 @@ export class SessionManager {
         return await this.fireAuth.signOut()
     }
 
-    async registerUserWith(email: string, password: string) {
+    async registerUserWith(email: string, password: string) : Promise<any> {
         return await this.fireAuth.createUserWithEmailAndPassword(email, password)
     }
 
-    async loginWith(email: string, password: string) {
+    async loginWith(email: string, password: string) : Promise<any> {
         return await this.fireAuth.signInWithEmailAndPassword(email, password)
     }
 
