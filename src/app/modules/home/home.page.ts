@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { StorageService } from 'src/managers/StorageService';
 import { Router } from '@angular/router';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
+import { RickAndMortyService } from 'src/managers/rickAndMortyService';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,8 @@ export class HomePage {
   constructor(
     private router: Router, 
     private storageService: StorageService,
-    private cancelAlertService: CancelAlertService) {}
+    private cancelAlertService: CancelAlertService,
+    private rickAndMortyService: RickAndMortyService) {}
 
   async ngOnInit() { 
     this.loadData()
@@ -27,6 +29,7 @@ export class HomePage {
     if (!this.user) {
       console.log('No se encontraron datos del usuario.')
     } 
+    this.loadCharacters()
   }
 
   async onSignOutButtonPressed() {
@@ -41,6 +44,17 @@ export class HomePage {
         console.log('Sesión no cerrada');
       }
     )
+  }
+
+  loadCharacters() {
+    this.rickAndMortyService.getCharacters().subscribe(
+      (response) => {
+        console.log('Personajes obtenidos:', response);
+      },
+      (error) => {
+        console.error('Error al obtener los personajes:', error);
+      }
+    );
   }
 
 }
