@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { ApiResponse } from 'src/app/model/api-response.model';
+import { Character } from 'src/app/model/rickAndMortyCharacter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +16,7 @@ export class RickAndMortyService {
 
   getCharacters() {
     const url = `${this.baseUrl}${this.endpoints.character}`;
-    return this.http.get(url);
+    return this.http.get<ApiResponse<Character>>(url)
   }
-
-  getLocations() {
-    const url = `${this.baseUrl}${this.endpoints.location}`;
-    return this.http.get(url);
-  }
-
-  getEpisodes() {
-    const url = `${this.baseUrl}${this.endpoints.episode}`;
-    return this.http.get(url);
-  }
+  
 }

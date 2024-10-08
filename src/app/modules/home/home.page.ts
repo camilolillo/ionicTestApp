@@ -3,6 +3,7 @@ import { StorageService } from 'src/managers/StorageService';
 import { Router } from '@angular/router';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { RickAndMortyService } from 'src/managers/rickAndMortyService';
+import { Character } from 'src/app/model/rickAndMortyCharacter.model';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ import { RickAndMortyService } from 'src/managers/rickAndMortyService';
 export class HomePage {  
 
   user: any
+  characters: Character[] = []
 
   constructor(
     private router: Router, 
@@ -37,24 +39,25 @@ export class HomePage {
       'Cerrar sesión',                         
       '¿Estás seguro de que quieres cerrar sesión?',  
       async () => {
-        await this.storageService.clear();     
-        this.router.navigate(['/splash']);     
+        await this.storageService.clear()    
+        this.router.navigate(['/splash'])   
       },
       () => {
-        console.log('Sesión no cerrada');
+        console.log('Sesión no cerrada')
       }
     )
   }
 
   loadCharacters() {
-    this.rickAndMortyService.getCharacters().subscribe(
-      (response) => {
-        console.log('Personajes obtenidos:', response);
+    this.rickAndMortyService.getCharacters().subscribe({
+      next: (response) => {
+        this.characters = response.results
       },
-      (error) => {
-        console.error('Error al obtener los personajes:', error);
+      error: (error) => {
+        console.error('Error al obtener los personajes:', error)
       }
-    );
+    })
+
   }
 
 }

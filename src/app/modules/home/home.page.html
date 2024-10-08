@@ -11,7 +11,8 @@
     </ion-toolbar>
   </ion-header>
 
-  <div style="margin: 16px;">
+  <!-- Tarjeta fija con la información del usuario -->
+  <div class="user-info">
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{ user?.displayName || 'Usuario' }}</ion-card-title>
@@ -31,11 +32,25 @@
     </ion-card>
   </div>
 
+  <!-- Lista de personajes usando ion-list -->
+  <ion-list class="character-list">
+    <ion-item *ngFor="let character of characters">
+      <ion-avatar slot="start">
+        <img [src]="character.image" alt="Imagen del personaje">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ character.name }}</h2>
+        <p>Especie: {{ character.species }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Botón de Cerrar Sesión fijo en la parte inferior -->
   <ion-button
     expand="block"
     class="close-session-button"
-    (click)="onSignOutButtonPressed()"
-    style="margin: 16px;">
+    (click)="onSignOutButtonPressed()">
     Cerrar Sesión
   </ion-button>
+
 </ion-content>
