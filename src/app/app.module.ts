@@ -14,6 +14,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from 'src/environments/environment';
 
+import { HttpClient } from '@angular/common/http';
+
 
 
 @NgModule({
@@ -26,7 +28,7 @@ import { environment } from 'src/environments/environment';
     AngularFireModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, provideFirebaseApp(() => initializeApp({"projectId":"ionictestapp-6355f","appId":"1:917555013625:web:2f6ceeb25d578f020bbf28","storageBucket":"ionictestapp-6355f.appspot.com","apiKey":"AIzaSyAs23Te1KQpkadfclC7nKlUoebPqpTgbDg","authDomain":"ionictestapp-6355f.firebaseapp.com","messagingSenderId":"917555013625"})), provideAuth(() => getAuth()), provideDatabase(() => getDatabase())],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

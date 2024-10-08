@@ -41,9 +41,6 @@ export class RegisterPage {
         alert('¡Registro exitoso!');
       }
 
-      
-      this.router.navigate(['/splash']);
-
     } catch (error: any) {
 
       switch (error.code) {
@@ -52,7 +49,7 @@ export class RegisterPage {
             'Error',                         
             'Este correo electrónico ya está en uso. Por favor, utiliza otro o inicia sesión.', 
             () => {    
-              this.clean     
+              this.clean()     
             }
           )
           break
@@ -61,7 +58,7 @@ export class RegisterPage {
             'Error',                         
             'La dirección de correo electrónico no es válida.', 
             () => {    
-              this.clean     
+              this.clean()   
             }
           )
           break
@@ -70,7 +67,7 @@ export class RegisterPage {
             'Error',                         
             'La contraseña es muy débil.', 
             () => {    
-              this.clean     
+              this.clean()      
             }
           )
           break
@@ -79,7 +76,7 @@ export class RegisterPage {
             'Error',                         
             'Ocurrió un error al registrar el usuario: ' + error.message, 
             () => {    
-              this.clean     
+              this.clean()      
             }
           )
           break

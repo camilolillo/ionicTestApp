@@ -25,11 +25,21 @@ export class LoginPage implements OnInit {
   async onLoginButtonPressed() {
 
     try {
+
       const userCredential = await this.sessionManager.loginWith(this.email, this.password)
       const user = userCredential.user
-      if (user) {
-        console.log('Usuario autenticado:', user);
+
+      const userData = {
+        uid: user.uid,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
       }
+
+      await this.storageService.set('user', userData)
+      this.router.navigate(['/splash'])
+
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }

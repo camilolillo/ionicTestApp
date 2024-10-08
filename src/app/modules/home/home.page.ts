@@ -9,9 +9,9 @@ import { CancelAlertService } from 'src/managers/CancelAlertService';
   styleUrls: ['home.page.scss'],
 })
 
-export class HomePage {
+export class HomePage {  
 
-  email: string = '';  
+  user: any
 
   constructor(
     private router: Router, 
@@ -23,8 +23,10 @@ export class HomePage {
   }
 
   async loadData() {
-    const userEmail = await this.storageService.get('userEmail')
-    this.email = userEmail
+    this.user = await this.storageService.get('user');
+    if (!this.user) {
+      console.log('No se encontraron datos del usuario.')
+    } 
   }
 
   async onSignOutButtonPressed() {
