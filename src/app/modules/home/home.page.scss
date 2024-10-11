@@ -1,0 +1,20 @@
+.user-info {
+  position: fixed;
+  top: 16;
+  left: 16px;
+  right: 16px;
+  z-index: 1;
+}
+
+.character-list {
+  margin-top: 150px; /* Ajustar para que comience debajo de la tarjeta */
+  padding-bottom: 80px; /* Añadir espacio para el botón de cerrar sesión */
+}
+
+.close-session-button {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 1;
+}
