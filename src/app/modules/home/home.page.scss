@@ -1,6 +1,6 @@
 .user-info {
   position: fixed;
-  top: 16;
+  top: 16px;
   left: 16px;
   right: 16px;
   z-index: 1;
@@ -8,7 +8,15 @@
 
 .character-list {
   margin-top: 150px; /* Ajustar para que comience debajo de la tarjeta */
-  padding-bottom: 80px; /* Añadir espacio para el botón de cerrar sesión */
+  padding-bottom: 160px; /* Añadir espacio para los botones de cerrar sesión y respaldar */
+}
+
+.backup-characters-button {
+  position: fixed;
+  bottom: 72px; /* 16px de separación con el botón de cerrar sesión */
+  left: 16px;
+  right: 16px;
+  z-index: 1;
 }
 
 .close-session-button {
