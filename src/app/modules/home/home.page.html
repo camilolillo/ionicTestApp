@@ -45,6 +45,14 @@
     </ion-item>
   </ion-list>
 
+  <!-- Botón para respaldar personajes -->
+  <ion-button
+    expand="block"
+    class="backup-characters-button"
+    (click)="saveCharactersToFirebase()">
+    RESPALDAR PERSONAJES
+  </ion-button>
+
   <!-- Botón de Cerrar Sesión fijo en la parte inferior -->
   <ion-button
     expand="block"
@@ -52,5 +60,4 @@
     (click)="onSignOutButtonPressed()">
     Cerrar Sesión
   </ion-button>
-
 </ion-content>
