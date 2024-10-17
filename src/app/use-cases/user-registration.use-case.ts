@@ -27,7 +27,7 @@ export class UserRegistrationUseCase {
       }
 
       // Devuelve true si fue exitoso, con un mensaje
-      return { success: true, message: "User registered successfully" };
+      return { success: true, message: "Usuario registrado con éxito" };
 
     } catch (error: any) {
       // Manejo de errores basado en el código de Firebase

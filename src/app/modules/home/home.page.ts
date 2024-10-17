@@ -26,15 +26,14 @@ export class HomePage {
   ) {}
 
   async ngOnInit() {
-    this.loadData();
+    this.loadCharacters();
   }
 
-  async loadData() {
+  async ionViewDidEnter() {
     this.user = await this.storageService.get('user');
     if (!this.user) {
       console.log('No se encontraron datos del usuario.');
     }
-    this.loadCharacters();
   }
 
   onProfileButtonPressed() {
