@@ -12,20 +12,20 @@ import { ItemCrudService } from 'src/managers/item-crud-service';
   styleUrls: ['home.page.scss'],
 })
 
-export class HomePage {  
+export class HomePage {
 
   user: any;
   characters: Character[] = [];
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private storageService: StorageService,
     private cancelAlertService: CancelAlertService,
     private rickAndMortyService: RickAndMortyService,
-    private itemCrudService: ItemCrudService  
+    private itemCrudService: ItemCrudService
   ) {}
 
-  async ngOnInit() { 
+  async ngOnInit() {
     this.loadData();
   }
 
@@ -33,17 +33,21 @@ export class HomePage {
     this.user = await this.storageService.get('user');
     if (!this.user) {
       console.log('No se encontraron datos del usuario.');
-    } 
+    }
     this.loadCharacters();
+  }
+
+  onProfileButtonPressed() {
+    this.router.navigate(['/profile'])
   }
 
   async onSignOutButtonPressed() {
     this.cancelAlertService.showAlert(
-      'Cerrar sesión',                         
-      '¿Estás seguro de que quieres cerrar sesión?',  
+      'Cerrar sesión',
+      '¿Estás seguro de que quieres cerrar sesión?',
       async () => {
-        await this.storageService.clear();    
-        this.router.navigate(['/splash']);   
+        await this.storageService.clear();
+        this.router.navigate(['/splash']);
       },
       () => {
         console.log('Sesión no cerrada');
@@ -56,7 +60,7 @@ export class HomePage {
       next: (response) => {
         this.characters = response.results;
         console.log('Personajes cargados:', this.characters);
-        this.saveCharactersToFirebase();  
+        this.saveCharactersToFirebase();
       },
       error: (error) => {
         console.error('Error al obtener los personajes:', error);
