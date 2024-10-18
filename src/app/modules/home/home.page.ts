@@ -5,6 +5,7 @@ import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { RickAndMortyService } from 'src/managers/rickAndMortyService';
 import { Character } from 'src/app/model/rickAndMortyCharacter.model';
 import { ItemCrudService } from 'src/managers/item-crud-service';
+import { UserLogoutUseCase } from 'src/app/use-cases/user-logout.user-case';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,8 @@ export class HomePage {
     private storageService: StorageService,
     private cancelAlertService: CancelAlertService,
     private rickAndMortyService: RickAndMortyService,
-    private itemCrudService: ItemCrudService
+    private itemCrudService: ItemCrudService,
+    private logoutUseCase: UserLogoutUseCase
   ) {}
 
   async ngOnInit() {
@@ -45,12 +47,10 @@ export class HomePage {
       'Cerrar sesión',
       '¿Estás seguro de que quieres cerrar sesión?',
       async () => {
-        await this.storageService.clear();
+        this.logoutUseCase.performLogout();
         this.router.navigate(['/splash']);
       },
-      () => {
-        console.log('Sesión no cerrada');
-      }
+      () => { }
     );
   }
 
