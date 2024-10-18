@@ -20,7 +20,7 @@ export class UserUpdateUseCase {
       const currentUser = await this.storageService.get('user');
 
       if (!currentUser) {
-        return { success: false, message: 'No user is currently logged in' };
+        return { success: false, message: 'No hay usuario guardado' };
       }
 
       const uid = currentUser.uid;

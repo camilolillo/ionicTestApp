@@ -38,27 +38,6 @@
     </ion-card>
   </div>
 
-  <!-- Lista de personajes usando ion-list -->
-  <ion-list class="character-list">
-    <ion-item *ngFor="let character of characters">
-      <ion-avatar slot="start">
-        <img [src]="character.image" alt="Imagen del personaje">
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ character.name }}</h2>
-        <p>Especie: {{ character.species }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <!-- Botón para respaldar personajes -->
-  <ion-button
-    expand="block"
-    class="backup-characters-button"
-    (click)="saveCharactersToFirebase()">
-    RESPALDAR PERSONAJES
-  </ion-button>
-
   <!-- Botón de Cerrar Sesión fijo en la parte inferior -->
   <ion-button
     expand="block"

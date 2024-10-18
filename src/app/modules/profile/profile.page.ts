@@ -24,9 +24,14 @@ export class ProfilePage implements OnInit {
     const user = await this.storageService.get('user');
 
     if (user) {
-      this.userEmail = user.email || 'Correo no disponible';
-      this.userName = user.displayName || '';
-      this.userPhotoURL = user.photoURL || 'assets/default-avatar.png';
+      // Chequeo de email, si es nulo o vacío, asignar valor por defecto
+      this.userEmail = user.email && user.email.trim() !== '' ? user.email : 'Correo no disponible';
+
+      // Chequeo de nombre, si es nulo o vacío, asignar valor por defecto
+      this.userName = user.displayName && user.displayName.trim() !== '' ? user.displayName : 'Nombre no disponible';
+
+      // Chequeo de foto, si es nula o vacía, asignar foto por defecto
+      this.userPhotoURL = user.photoURL && user.photoURL.trim() !== '' ? user.photoURL : 'assets/default-avatar.png';
     }
   }
 
@@ -48,4 +53,3 @@ export class ProfilePage implements OnInit {
     }
   }
 }
-

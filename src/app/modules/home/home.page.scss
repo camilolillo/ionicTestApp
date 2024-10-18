@@ -6,19 +6,6 @@
   z-index: 1;
 }
 
-.character-list {
-  margin-top: 128px; /* Ajustar para que comience debajo de la tarjeta */
-  padding-bottom: 160px; /* Añadir espacio para los botones de cerrar sesión y respaldar */
-}
-
-.backup-characters-button {
-  position: fixed;
-  bottom: 72px; /* 16px de separación con el botón de cerrar sesión */
-  left: 16px;
-  right: 16px;
-  z-index: 1;
-}
-
 .close-session-button {
   position: fixed;
   bottom: 16px;

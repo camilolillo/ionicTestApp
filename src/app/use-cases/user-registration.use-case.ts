@@ -19,11 +19,21 @@ export class UserRegistrationUseCase {
       const user = userCredential.user;
 
       if (user) {
-        // Obtén el UID y guarda el UID y el correo en Realtime Database
+        // Obtén el UID, el nombre de usuario y la URL de la foto de perfil (si existen)
         const uid = user.uid;
-        await this.db.object(`/users/${uid}`).set({
-          email: email
-        });
+        const displayName = user.displayName || '';  // Si no hay nombre, guarda un string vacío
+        const photoURL = user.photoURL || '';  // Si no hay URL de imagen, guarda un string vacío
+
+        // Crear objeto con los datos del usuario
+        const userData = {
+          uid: uid,
+          email: email,
+          displayName: displayName,
+          photoURL: photoURL
+        };
+
+        // Guarda la información del usuario en Realtime Database
+        await this.db.object(`/users/${uid}`).set(userData);
       }
 
       // Devuelve true si fue exitoso, con un mensaje

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { StorageService } from 'src/managers/StorageService';
 
 @Injectable({
@@ -9,28 +10,44 @@ export class UserLoginUseCase {
 
   constructor(
     private fireAuth: AngularFireAuth,
+    private db: AngularFireDatabase,
     private storageService: StorageService
   ) {}
 
   async performLogin(email: string, password: string): Promise<{ success: boolean; message: string }> {
     try {
+      // Autenticar el usuario utilizando Firebase Authentication
       const userCredential = await this.fireAuth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
 
       if (user) {
-        const userData = {
-          uid: user.uid,
-          email: user.email,
-          emailVerified: user.emailVerified,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-        };
+        const uid = user.uid;
 
-        await this.storageService.set('user', userData);
+        // Obtener la información del usuario desde Realtime Database
+        const userRef = this.db.object(`/users/${uid}`);
+        const userDataSnapshot = await userRef.query.once('value');
+        const userData = userDataSnapshot.val();
 
-        return { success: true, message: "Login successful" };
+        if (userData) {
+          // Manejo de campos vacíos (nombre de usuario y foto de perfil)
+          const displayName = userData.displayName || '';  // Si es nulo, guarda un string vacío
+          const photoURL = userData.photoURL || '';  // Si es nulo, guarda un string vacío
+
+          // Guardar los datos obtenidos de Realtime Database en Ionic Storage
+          await this.storageService.set('user', {
+            uid: uid,
+            email: userData.email || '',  // Si email es nulo, guarda string vacío
+            displayName: displayName,
+            photoURL: photoURL
+          });
+
+          return { success: true, message: "Login successful" };
+        } else {
+          return { success: false, message: "User not found in Realtime Database" };
+        }
+
       } else {
-        return { success: false, message: "User not found" };
+        return { success: false, message: "Authentication failed, user not found" };
       }
     } catch (error: any) {
       let errorMessage = 'Error during login';
