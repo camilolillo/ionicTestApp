@@ -12,12 +12,12 @@ export class UserUpdateUseCase {
     private db: AngularFireDatabase,
     private storageService: StorageService,
     private fireAuth: AngularFireAuth
-  ) {}
+  ) { }
 
   async performUserUpdate(newName: string): Promise<{ success: boolean; message: string }> {
     try {
-      // Obtener el usuario actual desde Firebase Authentication
-      const currentUser = await this.fireAuth.currentUser;
+      // Obtener el usuario actual desde Ionic Storage
+      const currentUser = await this.storageService.get('user');
 
       if (!currentUser) {
         return { success: false, message: 'No user is currently logged in' };
