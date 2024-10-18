@@ -34,6 +34,10 @@ export class HomePage {
     this.router.navigate(['/profile'])
   }
 
+  onCharactersPressed() {
+    this.router.navigate(['/characters']);
+  }
+
   async onSignOutButtonPressed() {
     this.cancelAlertService.showAlert(
       'Cerrar sesión',

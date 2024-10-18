@@ -30,8 +30,9 @@ const routes: Routes = [
   },
   {
     path: 'characters',
-    loadChildren: () => import('./characters/characters.module').then( m => m.CharactersPageModule)
-  },
+    loadChildren: () => import('./modules/characters/characters.module').then( m => m.CharactersPageModule)
+  }
+
 
 
 ];

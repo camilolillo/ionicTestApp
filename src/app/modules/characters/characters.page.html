@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Botón Back de Ionic -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button> <!-- Usa defaultHref para la página de fallback -->
+    </ion-buttons>
+
+    <ion-title>Personajes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Lista de personajes usando ion-list -->
+  <ion-list class="character-list">
+    <ion-item *ngFor="let character of characters">
+      <ion-avatar slot="start">
+        <img [src]="character.image" alt="Imagen del personaje">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ character.name }}</h2>
+        <p>Especie: {{ character.species }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+
