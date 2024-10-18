@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionManager } from 'src/managers/SessionManager';
-import { StorageService } from 'src/managers/StorageService';
+import { CancelAlertService } from 'src/managers/CancelAlertService'; // Asegúrate de tener el servicio de alertas
+import { UserLoginUseCase } from 'src/app/use-cases/user-login.use-case';
 
 @Component({
   selector: 'app-login',
@@ -10,43 +10,41 @@ import { StorageService } from 'src/managers/StorageService';
 })
 export class LoginPage implements OnInit {
 
+  email: string = '';
+  password: string = '';
+
   constructor(
-    private router: Router, 
-    private sessionManager: SessionManager,
-    private storageService: StorageService
-  ) { }
+    private router: Router,
+    private userLoginUseCase: UserLoginUseCase,
+    private alert: CancelAlertService // Inyecta el servicio de alertas
+  ) {}
 
-    email: string = '';
-    user: string = '';
-    password: string = '';
-
-  ngOnInit() { }
+  ngOnInit() {}
 
   async onLoginButtonPressed() {
+    const result = await this.userLoginUseCase.performLogin(this.email, this.password);
 
-    try {
-
-      const userCredential = await this.sessionManager.loginWith(this.email, this.password)
-      const user = userCredential.user
-
-      const userData = {
-        uid: user.uid,
-        email: user.email,
-        emailVerified: user.emailVerified,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-      }
-
-      await this.storageService.set('user', userData)
-      this.router.navigate(['/splash'])
-
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+    if (result.success) {
+      this.alert.showAlert(
+        'Login exitoso',
+        'Has iniciado sesión correctamente.',
+        () => {
+          this.router.navigate(['/splash']); // Navegar a 'splash' cuando el usuario presiona "Aceptar"
+        }
+      );
+    } else {
+      this.alert.showAlert(
+        'Error',
+        result.message,
+        () => {
+          // Se puede agregar alguna lógica aquí si es necesario
+        }
+      );
     }
   }
 
   onRegisterButtonPressed() {
     this.router.navigate(['/register']);
   }
-
 }
+
