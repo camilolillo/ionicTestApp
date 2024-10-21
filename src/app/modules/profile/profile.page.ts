@@ -3,6 +3,8 @@ import { StorageService } from 'src/managers/StorageService';
 import { UserUpdateUseCase } from 'src/app/use-cases/user-update.use-case';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { ActionSheetController } from '@ionic/angular';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 
 @Component({
   selector: 'app-profile',
@@ -28,10 +30,8 @@ export class ProfilePage implements OnInit {
     if (user) {
       // Chequeo de email, si es nulo o vacío, asignar valor por defecto
       this.userEmail = user.email && user.email.trim() !== '' ? user.email : 'Correo no disponible';
-
       // Chequeo de nombre, si es nulo o vacío, asignar valor por defecto
       this.userName = user.displayName && user.displayName.trim() !== '' ? user.displayName : 'Nombre no disponible';
-
       // Chequeo de foto, si es nula o vacía, asignar foto por defecto
       this.userPhotoURL = user.photoURL && user.photoURL.trim() !== '' ? user.photoURL : 'assets/default-avatar.png';
     }
@@ -62,18 +62,36 @@ export class ProfilePage implements OnInit {
         {
           text: 'Cámara',
           icon: 'camera',
-          handler: () => {
+          handler: async () => {
             console.log('Cámara seleccionada');
-            // Aquí puedes agregar la lógica para abrir la cámara
+
+                        const image = await Camera.getPhoto({
+              quality: 90,
+              allowEditing: false,
+              resultType: CameraResultType.Uri,
+              source: CameraSource.Camera,
+            });
+
+            const imageUrl = image.webPath;
+            console.log('Imagen capturada en:', imageUrl);
+
           }
         },
         {
           text: 'Imágenes',
           icon: 'image',
-          handler: () => {
-            console.log('Imágenes seleccionadas');
-            // Aquí puedes agregar la lógica para abrir la galería
-          }
+          handler: async () => {
+            const image = await Camera.getPhoto({
+              quality: 90,
+              allowEditing: false,
+              resultType: CameraResultType.Uri,
+              source: CameraSource.Photos,  // Abre la galería de imágenes
+            });
+
+            const imageUrl = image.webPath;
+            console.log('Imagen seleccionada de la galería en:', imageUrl);
+            // Aquí puedes usar la URL para mostrar la imagen o guardarla
+          },
         },
         {
           text: 'Cancelar',
