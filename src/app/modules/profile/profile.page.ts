@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/managers/StorageService';
 import { UserUpdateUseCase } from 'src/app/use-cases/user-update.use-case';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,8 @@ export class ProfilePage implements OnInit {
   constructor(
     private storageService: StorageService,
     private userUpdateUseCase: UserUpdateUseCase,
-    private alert: CancelAlertService
+    private alert: CancelAlertService,
+    private actionSheetController: ActionSheetController
   ) { }
 
   async ngOnInit() {
@@ -53,6 +55,37 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  onProfileImagePressed() { }
+  async onProfileImagePressed() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Selecciona una opción',
+      buttons: [
+        {
+          text: 'Cámara',
+          icon: 'camera',
+          handler: () => {
+            console.log('Cámara seleccionada');
+            // Aquí puedes agregar la lógica para abrir la cámara
+          }
+        },
+        {
+          text: 'Imágenes',
+          icon: 'image',
+          handler: () => {
+            console.log('Imágenes seleccionadas');
+            // Aquí puedes agregar la lógica para abrir la galería
+          }
+        },
+        {
+          text: 'Cancelar',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancelado');
+          }
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
 
 }
