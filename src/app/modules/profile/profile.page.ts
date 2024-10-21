@@ -52,4 +52,7 @@ export class ProfilePage implements OnInit {
       );
     }
   }
+
+  onProfileImagePressed() { }
+
 }
