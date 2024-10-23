@@ -5,15 +5,11 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage-angular';
-
 import { AngularFireModule } from '@angular/fire/compat';
-
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from 'src/environments/environment';
 import { provideHttpClient } from '@angular/common/http';
-
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 

@@ -4,7 +4,7 @@ import { UserUpdateUseCase } from 'src/app/use-cases/user-update.use-case';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-
+import { UploadUserImageUseCase } from 'src/app/use-cases/upload-user-image.use-case'; // //inicio de contenido nuevo
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +21,8 @@ export class ProfilePage implements OnInit {
     private storageService: StorageService,
     private userUpdateUseCase: UserUpdateUseCase,
     private alert: CancelAlertService,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private uploadUserImageUseCase: UploadUserImageUseCase // //inicio de contenido nuevo
   ) { }
 
   async ngOnInit() {
@@ -63,18 +64,33 @@ export class ProfilePage implements OnInit {
           text: 'Cámara',
           icon: 'camera',
           handler: async () => {
-            console.log('Cámara seleccionada');
-
-                        const image = await Camera.getPhoto({
+            const image = await Camera.getPhoto({
               quality: 90,
               allowEditing: false,
-              resultType: CameraResultType.Uri,
+              resultType: CameraResultType.DataUrl,  // Cambiado a DataUrl para obtener base64
               source: CameraSource.Camera,
             });
 
-            const imageUrl = image.webPath;
-            console.log('Imagen capturada en:', imageUrl);
+            const imageUrl = image.dataUrl;  // Ahora obtiene la imagen en formato base64
 
+            //inicio de contenido nuevo
+            const uploadResult = await this.uploadUserImageUseCase.UploadUserImage(imageUrl);
+            if (uploadResult.success) {
+              this.alert.showAlert(
+                'Imagen Actualizada',
+                'Tu imagen de perfil ha sido actualizada con éxito.',
+                () => {
+                  this.userPhotoURL = imageUrl; // Actualiza la foto en la vista
+                }
+              );
+            } else {
+              this.alert.showAlert(
+                'Error',
+                uploadResult.message,
+                () => { }
+              );
+            }
+            //fin de contenido nuevo
           }
         },
         {
@@ -84,26 +100,40 @@ export class ProfilePage implements OnInit {
             const image = await Camera.getPhoto({
               quality: 90,
               allowEditing: false,
-              resultType: CameraResultType.Uri,
+              resultType: CameraResultType.DataUrl,  // Cambiado a DataUrl para obtener base64
               source: CameraSource.Photos,  // Abre la galería de imágenes
             });
 
-            const imageUrl = image.webPath;
-            console.log('Imagen seleccionada de la galería en:', imageUrl);
-            // Aquí puedes usar la URL para mostrar la imagen o guardarla
+            const imageUrl = image.dataUrl;  // Ahora obtiene la imagen en formato base64
+
+            //inicio de contenido nuevo
+            const uploadResult = await this.uploadUserImageUseCase.UploadUserImage(imageUrl);
+            if (uploadResult.success) {
+              this.alert.showAlert(
+                'Imagen Actualizada',
+                'Tu imagen de perfil ha sido actualizada con éxito.',
+                () => {
+                  this.userPhotoURL = imageUrl; // Actualiza la foto en la vista
+                }
+              );
+            } else {
+              this.alert.showAlert(
+                'Error',
+                uploadResult.message,
+                () => { }
+              );
+            }
+            //fin de contenido nuevo
           },
         },
         {
           text: 'Cancelar',
           icon: 'close',
           role: 'cancel',
-          handler: () => {
-            console.log('Cancelado');
-          }
+          handler: () => { }
         }
       ]
     });
     await actionSheet.present();
   }
-
 }
