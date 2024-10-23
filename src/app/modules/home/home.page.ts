@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { StorageService } from 'src/managers/StorageService';
 import { Router } from '@angular/router';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
-import { ItemCrudService } from 'src/managers/item-crud-service';
 import { UserLogoutUseCase } from 'src/app/use-cases/user-logout.user-case';
 
 @Component({
@@ -19,7 +18,6 @@ export class HomePage {
     private router: Router,
     private storageService: StorageService,
     private cancelAlertService: CancelAlertService,
-    private itemCrudService: ItemCrudService,
     private logoutUseCase: UserLogoutUseCase
   ) {}
 
