@@ -14,16 +14,20 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule, 
-    IonicModule.forRoot(), 
-    AppRoutingModule, 
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
     IonicStorageModule.forRoot(),
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireDatabaseModule],
+    AngularFireDatabaseModule,
+    AngularFireStorageModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, provideHttpClient()],
   bootstrap: [AppComponent],
 })
