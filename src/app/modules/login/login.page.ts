@@ -36,9 +36,7 @@ export class LoginPage implements OnInit {
       this.alert.showAlert(
         'Error',
         result.message,
-        () => {
-          // Se puede agregar alguna lógica aquí si es necesario
-        }
+        () => { }
       );
     }
   }

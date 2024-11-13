@@ -3,8 +3,7 @@ import { StorageService } from 'src/managers/StorageService';
 import { UserUpdateUseCase } from 'src/app/use-cases/user-update.use-case';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { ActionSheetController } from '@ionic/angular';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { UploadUserImageUseCase } from 'src/app/use-cases/upload-user-image.use-case'; // //inicio de contenido nuevo
+import { ImageService } from 'src/managers/image-service';
 
 @Component({
   selector: 'app-profile',
@@ -22,18 +21,15 @@ export class ProfilePage implements OnInit {
     private userUpdateUseCase: UserUpdateUseCase,
     private alert: CancelAlertService,
     private actionSheetController: ActionSheetController,
-    private uploadUserImageUseCase: UploadUserImageUseCase // //inicio de contenido nuevo
+    private imageService: ImageService  // Nuevo servicio
   ) { }
 
   async ngOnInit() {
     const user = await this.storageService.get('user');
 
     if (user) {
-      // Chequeo de email, si es nulo o vacío, asignar valor por defecto
       this.userEmail = user.email && user.email.trim() !== '' ? user.email : 'Correo no disponible';
-      // Chequeo de nombre, si es nulo o vacío, asignar valor por defecto
       this.userName = user.displayName && user.displayName.trim() !== '' ? user.displayName : 'Nombre no disponible';
-      // Chequeo de foto, si es nula o vacía, asignar foto por defecto
       this.userPhotoURL = user.photoURL && user.photoURL.trim() !== '' ? user.photoURL : 'assets/default-avatar.png';
     }
   }
@@ -64,66 +60,16 @@ export class ProfilePage implements OnInit {
           text: 'Cámara',
           icon: 'camera',
           handler: async () => {
-            const image = await Camera.getPhoto({
-              quality: 90,
-              allowEditing: false,
-              resultType: CameraResultType.DataUrl,  // Cambiado a DataUrl para obtener base64
-              source: CameraSource.Camera,
-            });
-
-            const imageUrl = image.dataUrl;  // Ahora obtiene la imagen en formato base64
-
-            //inicio de contenido nuevo
-            const uploadResult = await this.uploadUserImageUseCase.UploadUserImage(imageUrl);
-            if (uploadResult.success) {
-              this.alert.showAlert(
-                'Imagen Actualizada',
-                'Tu imagen de perfil ha sido actualizada con éxito.',
-                () => {
-                  this.userPhotoURL = imageUrl; // Actualiza la foto en la vista
-                }
-              );
-            } else {
-              this.alert.showAlert(
-                'Error',
-                uploadResult.message,
-                () => { }
-              );
-            }
-            //fin de contenido nuevo
+            const uploadResult = await this.imageService.getImageFromCamera();
+            this.handleImageUploadResult(uploadResult);
           }
         },
         {
           text: 'Imágenes',
           icon: 'image',
           handler: async () => {
-            const image = await Camera.getPhoto({
-              quality: 90,
-              allowEditing: false,
-              resultType: CameraResultType.DataUrl,  // Cambiado a DataUrl para obtener base64
-              source: CameraSource.Photos,  // Abre la galería de imágenes
-            });
-
-            const imageUrl = image.dataUrl;  // Ahora obtiene la imagen en formato base64
-
-            //inicio de contenido nuevo
-            const uploadResult = await this.uploadUserImageUseCase.UploadUserImage(imageUrl);
-            if (uploadResult.success) {
-              this.alert.showAlert(
-                'Imagen Actualizada',
-                'Tu imagen de perfil ha sido actualizada con éxito.',
-                () => {
-                  this.userPhotoURL = imageUrl; // Actualiza la foto en la vista
-                }
-              );
-            } else {
-              this.alert.showAlert(
-                'Error',
-                uploadResult.message,
-                () => { }
-              );
-            }
-            //fin de contenido nuevo
+            const uploadResult = await this.imageService.getImageFromGallery();
+            this.handleImageUploadResult(uploadResult);
           },
         },
         {
@@ -135,5 +81,23 @@ export class ProfilePage implements OnInit {
       ]
     });
     await actionSheet.present();
+  }
+
+  private handleImageUploadResult(uploadResult: { success: boolean, message: string, imageUrl?: string }) {
+    if (uploadResult.success) {
+      this.alert.showAlert(
+        'Imagen Actualizada',
+        'Tu imagen de perfil ha sido actualizada con éxito.',
+        () => {
+          this.userPhotoURL = uploadResult.imageUrl || 'assets/default-avatar.png';
+        }
+      );
+    } else {
+      this.alert.showAlert(
+        'Error',
+        uploadResult.message,
+        () => { }
+      );
+    }
   }
 }
