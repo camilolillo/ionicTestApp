@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CancelAlertService } from 'src/managers/CancelAlertService'; // Asegúrate de tener el servicio de alertas
+import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { UserLoginUseCase } from 'src/app/use-cases/user-login.use-case';
 
 @Component({
@@ -16,7 +16,7 @@ export class LoginPage implements OnInit {
   constructor(
     private router: Router,
     private userLoginUseCase: UserLoginUseCase,
-    private alert: CancelAlertService // Inyecta el servicio de alertas
+    private alert: CancelAlertService
   ) {}
 
   ngOnInit() {}
@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
         'Login exitoso',
         'Has iniciado sesión correctamente.',
         () => {
-          this.router.navigate(['/splash']); // Navegar a 'splash' cuando el usuario presiona "Aceptar"
+          this.router.navigate(['/splash']);
         }
       );
     } else {
