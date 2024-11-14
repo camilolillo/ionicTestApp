@@ -4,6 +4,7 @@ import { UserUpdateUseCase } from 'src/app/use-cases/user-update.use-case';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { ActionSheetController } from '@ionic/angular';
 import { ImageService } from 'src/managers/image-service';
+import { UploadUserImageUseCase } from 'src/app/use-cases/upload-user-image.use-case';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +22,8 @@ export class ProfilePage implements OnInit {
     private userUpdateUseCase: UserUpdateUseCase,
     private alert: CancelAlertService,
     private actionSheetController: ActionSheetController,
-    private imageService: ImageService  // Nuevo servicio
+    private imageService: ImageService, // Servicio para obtener imágenes
+    private uploadUserImageUseCase: UploadUserImageUseCase // Caso de uso para subir la imagen
   ) { }
 
   async ngOnInit() {
@@ -60,16 +62,20 @@ export class ProfilePage implements OnInit {
           text: 'Cámara',
           icon: 'camera',
           handler: async () => {
-            const uploadResult = await this.imageService.getImageFromCamera();
-            this.handleImageUploadResult(uploadResult);
+            const imageUrl = await this.imageService.getImageFromCamera();
+            if (imageUrl) {
+              await this.uploadAndSetProfileImage(imageUrl);
+            }
           }
         },
         {
           text: 'Imágenes',
           icon: 'image',
           handler: async () => {
-            const uploadResult = await this.imageService.getImageFromGallery();
-            this.handleImageUploadResult(uploadResult);
+            const imageUrl = await this.imageService.getImageFromGallery();
+            if (imageUrl) {
+              await this.uploadAndSetProfileImage(imageUrl);
+            }
           },
         },
         {
@@ -83,13 +89,15 @@ export class ProfilePage implements OnInit {
     await actionSheet.present();
   }
 
-  private handleImageUploadResult(uploadResult: { success: boolean, message: string, imageUrl?: string }) {
+  private async uploadAndSetProfileImage(imageUrl: string) {
+    const uploadResult = await this.uploadUserImageUseCase.UploadUserImage(imageUrl);
+
     if (uploadResult.success) {
       this.alert.showAlert(
         'Imagen Actualizada',
         'Tu imagen de perfil ha sido actualizada con éxito.',
         () => {
-          this.userPhotoURL = uploadResult.imageUrl || 'assets/default-avatar.png';
+          this.userPhotoURL = imageUrl; // Actualiza la URL de la imagen del perfil
         }
       );
     } else {

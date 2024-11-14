@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from 'src/managers/StorageService';
-import { FirebaseStorageService } from 'src/managers/storage-service';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { SupabaseService } from 'src/managers/supabase-service'; // Importa el servicio de Supabase
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +10,8 @@ export class UploadUserImageUseCase {
 
   constructor(
     private storageService: StorageService,
-    private firebaseStorageService: FirebaseStorageService,
-    private db: AngularFireDatabase // Acceso a Realtime Database
+    private db: AngularFireDatabase, // Acceso a Realtime Database
+    private supabaseService: SupabaseService // Cliente de Supabase
   ) {}
 
   async UploadUserImage(imageUrl: string): Promise<{ success: boolean, message: string }> {
@@ -22,11 +22,18 @@ export class UploadUserImageUseCase {
       if (user && user.uid) {
         const uid = user.uid;
 
-        // Define la ruta de almacenamiento en Firebase Storage
+        // Define la ruta de almacenamiento en Supabase Storage
         const path = `Users/${uid}/profile-image.jpg`;
 
-        // Sube la imagen a Firebase Storage y obtén la URL de la imagen subida
-        const downloadURL = await this.firebaseStorageService.uploadFile(imageUrl, path, 'profile-image.jpg');
+        // Subida a Supabase Storage directamente
+        const uploadResponse = await this.supabaseService.uploadImage(path, imageUrl);
+
+        if (!uploadResponse) {
+          return { success: false, message: 'Error al subir la imagen a Supabase' };
+        }
+
+        // Obtener URL pública desde Supabase
+        const downloadURL = this.supabaseService.getPublicUrl(path);
 
         // Actualiza el nodo del usuario en Realtime Database con la nueva URL de la imagen
         await this.db.object(`users/${uid}`).update({ photoURL: downloadURL });

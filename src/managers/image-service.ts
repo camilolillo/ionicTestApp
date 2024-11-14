@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { UploadUserImageUseCase } from 'src/app/use-cases/upload-user-image.use-case';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class ImageService {
 
-  constructor(private uploadUserImageUseCase: UploadUserImageUseCase) { }
+  constructor() {}
 
-  async getImageFromCamera(): Promise<{ success: boolean, message: string, imageUrl?: string }> {
+  // Método para obtener una imagen desde la cámara
+  async getImageFromCamera(): Promise<string> {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
@@ -19,14 +18,15 @@ export class ImageService {
         source: CameraSource.Camera,
       });
 
-      const imageUrl = image.dataUrl;
-      return await this.uploadImage(imageUrl);
+      return image.dataUrl;
     } catch (error) {
-      return { success: false, message: 'Error al obtener la imagen de la cámara.' };
+      console.error('Error al obtener la imagen de la cámara:', error);
+      return "";
     }
   }
 
-  async getImageFromGallery(): Promise<{ success: boolean, message: string, imageUrl?: string }> {
+  // Método para obtener una imagen desde la galería
+  async getImageFromGallery(): Promise<string> {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
@@ -35,21 +35,10 @@ export class ImageService {
         source: CameraSource.Photos,
       });
 
-      const imageUrl = image.dataUrl;
-      return await this.uploadImage(imageUrl);
+      return image.dataUrl;
     } catch (error) {
-      return { success: false, message: 'Error al obtener la imagen de la galería.' };
+      console.error('Error al obtener la imagen de la galería:', error);
+      return "";
     }
   }
-
-  private async uploadImage(imageUrl: string): Promise<{ success: boolean, message: string, imageUrl?: string }> {
-    const uploadResult = await this.uploadUserImageUseCase.UploadUserImage(imageUrl);
-
-    if (uploadResult.success) {
-      return { success: true, message: 'Imagen subida con éxito', imageUrl: imageUrl };
-    } else {
-      return { success: false, message: uploadResult.message };
-    }
-  }
-
 }
