@@ -61,7 +61,7 @@ export class ProfilePage implements OnInit {
           icon: 'camera',
           handler: async () => {
             const uploadResult = await this.imageService.getImageFromCamera();
-            this.handleImageUploadResult(uploadResult);
+            console.log(uploadResult);
           }
         },
         {
@@ -69,7 +69,7 @@ export class ProfilePage implements OnInit {
           icon: 'image',
           handler: async () => {
             const uploadResult = await this.imageService.getImageFromGallery();
-            this.handleImageUploadResult(uploadResult);
+            console.log(uploadResult);
           },
         },
         {
@@ -83,21 +83,4 @@ export class ProfilePage implements OnInit {
     await actionSheet.present();
   }
 
-  private handleImageUploadResult(uploadResult: { success: boolean, message: string, imageUrl?: string }) {
-    if (uploadResult.success) {
-      this.alert.showAlert(
-        'Imagen Actualizada',
-        'Tu imagen de perfil ha sido actualizada con éxito.',
-        () => {
-          this.userPhotoURL = uploadResult.imageUrl || 'assets/default-avatar.png';
-        }
-      );
-    } else {
-      this.alert.showAlert(
-        'Error',
-        uploadResult.message,
-        () => { }
-      );
-    }
-  }
 }

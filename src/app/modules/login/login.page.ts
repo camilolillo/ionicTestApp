@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { UserLoginUseCase } from 'src/app/use-cases/user-login.use-case';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -19,7 +20,7 @@ export class LoginPage implements OnInit {
     private alert: CancelAlertService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   async onLoginButtonPressed() {
     const result = await this.userLoginUseCase.performLogin(this.email, this.password);

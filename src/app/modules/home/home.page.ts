@@ -3,6 +3,7 @@ import { StorageService } from 'src/managers/StorageService';
 import { Router } from '@angular/router';
 import { CancelAlertService } from 'src/managers/CancelAlertService';
 import { UserLogoutUseCase } from 'src/app/use-cases/user-logout.user-case';
+import { GeolocationService } from 'src/managers/geolocation-service';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ export class HomePage {
     private router: Router,
     private storageService: StorageService,
     private cancelAlertService: CancelAlertService,
-    private logoutUseCase: UserLogoutUseCase
+    private logoutUseCase: UserLogoutUseCase,
+    private geoService: GeolocationService
   ) {}
 
   async ionViewDidEnter() {
@@ -26,6 +28,7 @@ export class HomePage {
     if (!this.user) {
       console.log('No se encontraron datos del usuario.');
     }
+    console.log(this.geoService.getCurrentLocation());
   }
 
   onProfileButtonPressed() {
